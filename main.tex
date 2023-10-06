@@ -171,11 +171,11 @@ Possible Solutions:
 \end{definition}
 
 \begin{definition}
-    Let $A \in \mathbb{R}^{f \times n}$, the $i^{th}$ row of $A$ be $a_i$. Each row of $A$ indicates a combination of surviving workers/non-stragglers.
+    Let $A \in \mathbb{R}^{f \times n}$, the $i^{th}$ row of $A$ be $\boldsymbol{a_i}$. Each row of $A$ indicates a combination of surviving workers/non-stragglers.
 \end{definition}
 
 \begin{definition}
-    Let $B \in \mathbb{R}^{n \times k}$, the $i^{th}$ row of $B$ be $b_i$. $b_i$ indicates the data partitions that the $i^{th}$ worker has access to.
+    Let $B \in \mathbb{R}^{n \times k}$, the $i^{th}$ row of $B$ be $\boldsymbol{b_i}$. $\boldsymbol{b_i}$ indicates the data partitions that the $i^{th}$ worker has access to.
 \end{definition}
 
 \end{frame}
@@ -216,6 +216,21 @@ Possible Solutions:
 \end{column}
 
 \end{columns}
+
+\end{frame}
+
+\begin{frame}{Gradient Coding}{The General Setup}
+
+\begin{block}{Property}
+    \[\boldsymbol{a_i}B\boldsymbol{\bar{g}} = \begin{bmatrix}
+        1 & 1 & \dots & 1
+    \end{bmatrix}\boldsymbol{\bar{g}} = (\sum_{j=1}^{k}\boldsymbol{g_j})^T\]
+    \[\boldsymbol{a_i}B\boldsymbol{\bar{g}} = \sum_{k\in supp(\boldsymbol{a_i})}\boldsymbol{a_i}(j)(\boldsymbol{b_j} \boldsymbol{\bar{g}})\]
+    where $\boldsymbol{\bar{g}} = \begin{bmatrix}
+        \boldsymbol{g_1} & \boldsymbol{g_2} & \dots & \boldsymbol{g_k}
+    \end{bmatrix}^T$, $\boldsymbol{g_i}$ denotes the gradient of the $i^{th}$ partition of work, $supp(\boldsymbol{x}) = \{i | x_i \neq 0\}$.
+\end{block}
+
 
 \end{frame}
 
