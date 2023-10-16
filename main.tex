@@ -5,16 +5,19 @@
 
 \mode<presentation>
 {
-  \usetheme{Warsaw}
+  \usetheme{Darmstadt}
 
   \setbeamercovered{transparent}
 }
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 \title{Gradient Coding}
 
 \author{Runtian Zhu \\ \texttt{zhurt23@m.fudan.edu.cn}}
 
-\date{2023.10.7}
+\date{2023.11.2}
 
 \begin{document}
 
@@ -28,16 +31,16 @@
 %   \tableofcontents
 % \end{frame}
 
-\section{References}
+% \section{References}
 
-\begin{frame}{References}
+% \begin{frame}{References}
 
-\begin{itemize}
-    \item R. Tandon, Q. Lei, A. G. Dimakis, and N. Karampatziakis, “\textbf{Gradient coding: Avoiding stragglers in distributed learning},” in International Conference on Machine Learning, PMLR, 2017, pp. 3368–3376.
-    \item L. Chen, H. Wang, Z. Charles, and D. Papailiopoulos, “\textbf{Draco: Byzantine-resilient distributed training via redundant gradients},” in International Conference on Machine Learning, PMLR, 2018, pp. 903–912.
-    \item C. Hofmeister, L. Maßny, E. Yaakobi, and R. Bitar, “\textbf{Trading Communication for Computation in Byzantine-Resilient Gradient Coding},” arXiv preprint arXiv:2303.13231, 2023.
+% \begin{itemize}
+%     \item R. Tandon, Q. Lei, A. G. Dimakis, and N. Karampatziakis, “\textbf{Gradient coding: Avoiding stragglers in distributed learning},” in International Conference on Machine Learning, PMLR, 2017, pp. 3368–3376.
+%     \item L. Chen, H. Wang, Z. Charles, and D. Papailiopoulos, “\textbf{Draco: Byzantine-resilient distributed training via redundant gradients},” in International Conference on Machine Learning, PMLR, 2018, pp. 903–912.
+%     \item C. Hofmeister, L. Maßny, E. Yaakobi, and R. Bitar, “\textbf{Trading Communication for Computation in Byzantine-Resilient Gradient Coding},” arXiv preprint arXiv:2303.13231, 2023.
     
-\end{itemize}
+% \end{itemize}
 
 % \begin{figure}
 %     \centering
@@ -63,23 +66,98 @@
 %     \end{minipage}
 % \end{figure}
 
+% \end{frame}
+
+\section{Background}
+
+\begin{frame}
+    \frametitle{Machine Learning: Regression}
+
+    \begin{block}{Regression (fake)}
+        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f$ such that $f(\boldsymbol{x}_i) = \boldsymbol{y}_i$.
+    \end{block}
+    \begin{solution}
+        \[f(\boldsymbol{x}) = \begin{cases}
+            \boldsymbol{y}_1 & \boldsymbol{x} = \boldsymbol{x}_1 \\
+            \cdots & \\
+            \boldsymbol{y}_N & \boldsymbol{x} = \boldsymbol{x}_N \\
+            \boldsymbol{0} & others
+        \end{cases}\]
+    \end{solution}
+
 \end{frame}
 
-\section{Gradient Coding}
+\begin{frame}
+    \frametitle{Machine Learning: Regression}
 
-\subsection{Background}
+    \begin{block}{Regression (still fake)}
+        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f$ from some function space $F$ such that $f(\boldsymbol{x}_i) = \boldsymbol{y}_i$.
+    \end{block}
+    \begin{example}
+        \[F = \{x^2 + ax + b \vert a, b \in \mathbb{R}\}\]
+        \[D = \{(-1, 1), (0, 0), (1, 1)\}\]
+        \begin{itemize}
+            \item answer: $f(x) = x^2$
+        \end{itemize}
+    \end{example}
 
-\begin{frame}{Distributed Learning}{Gradient Descent in Machine Learning}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Machine Learning: Regression}
+
+    \begin{example}
+        \[F = \{x^2 + ax + b \vert a, b \in \mathbb{R}\}\]
+        \[D = \{(-1, 1), (0, 0), (1, 1), (2, 5)\}\]
+        \begin{itemize}
+            \item answer: $\emptyset$
+        \end{itemize}
+    \end{example}
+    \pause
+    \begin{block}{Regression (informal)}
+        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f$ from some function space $F$ such that $f$ fits $D$ best.
+    \end{block}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Machine Learning: Regression}
+
+    \begin{block}{Regression}
+        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f_{\boldsymbol{\theta}_0}$ from some function space $F = \{f_{\boldsymbol{\theta}} \vert \boldsymbol{\theta} \in \mathbb{R}^m\}$ such that
+        \[\boldsymbol{\theta}_0 = \argmin_{\boldsymbol{\theta}} L(\boldsymbol{\theta})\]
+    \end{block}
+    
+    \begin{block}{Loss Function: Mean Squared Error (MSE)}
+        \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} (\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i))^2\]
+    \end{block}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Machine Learning: Regression}
+
+    \begin{example}
+        \[F = \{x^2 + ax + b \vert a, b \in \mathbb{R}\}\]
+        \[D = \{(-1, 1), (0, 0), (1, 1), (2, 5)\}\]
+        \[L(\boldsymbol{\theta}) = \frac{(1 - f_{\boldsymbol{\theta}}(-1))^2 + (0 - f_{\boldsymbol{\theta}}(0))^2 + (1 - f_{\boldsymbol{\theta}}(1))^2 + (5 - f_{\boldsymbol{\theta}}(2))^2}{4}\]
+    \end{example}
+
+\end{frame}
+
+\begin{frame}
+    
+\frametitle{Gradient Descent in Machine Learning}
 
 \begin{block}{Gradient Descent}
-    find $\boldsymbol{\theta}$ to minimize $L(\boldsymbol{\theta})$\ ($\boldsymbol{\theta}_0$ is chosen randomly):
+    Find $\boldsymbol{\theta}$ to minimize $L(\boldsymbol{\theta})$\ ($\boldsymbol{\theta}_0$ is chosen randomly):
 
-    \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta})\]
+    \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta}_{k})\]
 \end{block}
 
-\begin{block}{Loss Function}
-    Suppose training set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), (\boldsymbol{x}_2, \boldsymbol{y}_2), (\boldsymbol{x}_m, \boldsymbol{y}_m)\}$. Let $\boldsymbol{X} = [\boldsymbol{x}_1, \boldsymbol{x}_2, \dots, \boldsymbol{x}_m]$, $\boldsymbol{Y} = [\boldsymbol{y}_1, \boldsymbol{y}_2, \dots, \boldsymbol{y}_m]$, $\boldsymbol{\theta}$ is hyperparameter, $l(\boldsymbol{\theta}, \boldsymbol{x}_i, \boldsymbol{y}_i)$ is the loss function. The total loss function is
-    \[L(\boldsymbol{\theta}, \boldsymbol{X}, \boldsymbol{Y}) = \sum_{i}\frac{1}{m}l(\boldsymbol{\theta}, \boldsymbol{x}_i, \boldsymbol{y}_i)\]
+\begin{block}{Machine Learning}
+    Suppose training set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), (\boldsymbol{x}_2, \boldsymbol{y}_2), (\boldsymbol{x}_m, \boldsymbol{y}_m)\}$. Let $X = [\boldsymbol{x}_1, \boldsymbol{x}_2, \dots, \boldsymbol{x}_m]$, $Y = [\boldsymbol{y}_1, \boldsymbol{y}_2, \dots, \boldsymbol{y}_m]$, $\boldsymbol{\theta}$ is hyperparameter, $l(\boldsymbol{\theta}, \boldsymbol{x}_i, \boldsymbol{y}_i)$ is the loss function. The total loss function is
+    \[L(\boldsymbol{\theta}, X, Y) = \sum_{i}\frac{1}{m}l(\boldsymbol{\theta}, \boldsymbol{x}_i, \boldsymbol{y}_i)\]
 \end{block}
 
 \end{frame}
@@ -121,6 +199,8 @@ Possible Solutions:
 \end{itemize}
 
 \end{frame}
+
+\section{Gradient Coding}
 
 \subsection{An Example}
 
