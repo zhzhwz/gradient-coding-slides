@@ -124,8 +124,8 @@
     \frametitle{Machine Learning: Regression}
 
     \begin{block}{Regression}
-        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f_{\boldsymbol{\theta}_0}$ from some function space $F = \{f_{\boldsymbol{\theta}} \vert \boldsymbol{\theta} \in \mathbb{R}^m\}$ such that
-        \[\boldsymbol{\theta}_0 = \argmin_{\boldsymbol{\theta}} L(\boldsymbol{\theta})\]
+        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f_{\hat{\boldsymbol{\theta}}}$ from some function space $F = \{f_{\boldsymbol{\theta}} \vert \boldsymbol{\theta} \in \mathbb{R}^m\}$ such that
+        \[\hat{\boldsymbol{\theta}} = \argmin_{\boldsymbol{\theta}} L(\boldsymbol{\theta})\]
     \end{block}
     
     \begin{block}{Loss Function: Mean Squared Error (MSE)}
@@ -141,42 +141,46 @@
         \[F = \{x^2 + ax + b \vert a, b \in \mathbb{R}\}\]
         \[D = \{(-1, 1), (0, 0), (1, 1), (2, 5)\}\]
         \[L(\boldsymbol{\theta}) = \frac{(1 - f_{\boldsymbol{\theta}}(-1))^2 + (0 - f_{\boldsymbol{\theta}}(0))^2 + (1 - f_{\boldsymbol{\theta}}(1))^2 + (5 - f_{\boldsymbol{\theta}}(2))^2}{4}\]
+        \[f = x^2 + \frac{3}{10}x + \frac{1}{10}, L(\boldsymbol{\theta}) = \frac{3}{40}\]
+        \centering
+        \includegraphics[height=.3\textheight]{res/function.png}
     \end{example}
 
 \end{frame}
 
 \begin{frame}
     
-\frametitle{Gradient Descent in Machine Learning}
-
+\frametitle{Gradient Descent}
+    
 \begin{block}{Gradient Descent}
-    Find $\boldsymbol{\theta}$ to minimize $L(\boldsymbol{\theta})$\ ($\boldsymbol{\theta}_0$ is chosen randomly):
+    Goal: to find a $\hat{\boldsymbol{\theta}}$ such that $\hat{\boldsymbol{\theta}} = \argmin_{\boldsymbol{\theta}} L(\boldsymbol{\theta})$.
 
+    \[\boldsymbol{\theta}_{0} = random\,generated\]
     \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta}_{k})\]
+
+    where $\alpha$ is chosen s.t. $\alpha > 0$.
 \end{block}
 
-\begin{block}{Machine Learning}
-    Suppose training set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), (\boldsymbol{x}_2, \boldsymbol{y}_2), (\boldsymbol{x}_m, \boldsymbol{y}_m)\}$. Let $X = [\boldsymbol{x}_1, \boldsymbol{x}_2, \dots, \boldsymbol{x}_m]$, $Y = [\boldsymbol{y}_1, \boldsymbol{y}_2, \dots, \boldsymbol{y}_m]$, $\boldsymbol{\theta}$ is hyperparameter, $l(\boldsymbol{\theta}, \boldsymbol{x}_i, \boldsymbol{y}_i)$ is the loss function. The total loss function is
-    \[L(\boldsymbol{\theta}, X, Y) = \sum_{i}\frac{1}{m}l(\boldsymbol{\theta}, \boldsymbol{x}_i, \boldsymbol{y}_i)\]
-\end{block}
+\begin{example}
+    $L(x, y) = \frac{3}{2}x^2 + xy + y^2 - x - \frac{1}{2}y + \frac{1}{4}$
+    \centering
+    \includegraphics[height=.3\textheight]{res/func3d.png}
+\end{example}
 
 \end{frame}
 
 \begin{frame}{Distributed Learning}{Gradient Descent in Machine Learning}
 
 \begin{block}{Gradient Descent}
-    \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta})\]
+    \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta}_{k})\]
 \end{block}
-
-\begin{block}{Loss Function}
-    \[L(\boldsymbol{\theta}, \boldsymbol{X}, \boldsymbol{Y}) = \sum_{i}\frac{1}{m}l(\boldsymbol{\theta}, \boldsymbol{x}_i, \boldsymbol{y}_i)\]
+    
+\begin{block}{Loss Function: Mean Squared Error (MSE)}
+    \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} (\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i))^2\]
+    \[l_i(\boldsymbol{\theta}) = (\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i))^2\]
+    \[L(\boldsymbol{\theta}) = \sum_{i = 1}^{N} \frac{1}{N}l_i(\boldsymbol{\theta})\]
+    $l_i(\boldsymbol{\theta})$ is determined by $(\boldsymbol{x}_i, \boldsymbol{y}_i)$: gradient can be calculated distributedly!
 \end{block}
-
-\begin{block}{The linearity of gradient}
-    \[\boldsymbol{\nabla} L(\boldsymbol{\theta}, \boldsymbol{X}, \boldsymbol{Y}) = \sum_{i}\boldsymbol{\nabla} \frac{1}{m}l(\boldsymbol{\theta}, \boldsymbol{x}_i, \boldsymbol{y}_i)\]
-\end{block}
-
-Gradient can be calculated distributedly!
 
 \end{frame}
 
