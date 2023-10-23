@@ -108,7 +108,7 @@
     \end{block}
     
     \begin{block}{Loss Function: Mean Squared Error (MSE)}
-        \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} (\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i))^2\]
+        \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} \lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2\]
     \end{block}
 
 \end{frame}
@@ -163,10 +163,9 @@
 \end{block}
     
 \begin{block}{Loss Function: Mean Squared Error (MSE)}
-    \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} (\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i))^2\]
-    \[l_i(\boldsymbol{\theta}) = (\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i))^2\]
-    \[L(\boldsymbol{\theta}) = \sum_{i = 1}^{N} \frac{1}{N}l_i(\boldsymbol{\theta})\]
-    $l_i(\boldsymbol{\theta})$ is determined by $(\boldsymbol{x}_i, \boldsymbol{y}_i)$: gradient can be calculated distributedly!
+    \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} \lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2\]
+    \[\boldsymbol{\nabla}L(\boldsymbol{\theta}) = \sum_{i = 1}^{N}\frac{\partial\frac{1}{N}\lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2}{\partial\boldsymbol{\theta}}\]
+    Gradient can be calculated distributedly
 \end{block}
 
 \end{frame}
