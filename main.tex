@@ -17,7 +17,7 @@
 
 \author{Runtian Zhu \\ \texttt{zhurt23@m.fudan.edu.cn}}
 
-\date{2023.11.2}
+\date{2023.11.9}
 
 \begin{document}
 
@@ -27,13 +27,7 @@
   \titlepage
 \end{frame}
 
-% \begin{frame}{Outline}
-%   \tableofcontents
-% \end{frame}
-
-\section{Gradient Coding}
-
-\subsection{Reference}
+\section{Reference}
 
 \begin{frame}{Reference}
 
@@ -67,37 +61,7 @@
 
 \end{frame}
 
-\begin{frame}
-    \frametitle{Machine Learning: Regression}
-
-    \begin{block}{Regression (fake)}
-        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f$ from some function space $F$ such that $f(\boldsymbol{x}_i) = \boldsymbol{y}_i$.
-    \end{block}
-
-    \begin{example}
-        \[D = \{(0, 0), (1, 1)\}\]
-        \[F = \{x^2 + ax + b \vert a, b \in \mathbb{R}\}\]
-        \[f(x) = x^2\]
-    \end{example}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Machine Learning: Regression}
-
-    \begin{block}{Regression (fake)}
-        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f$ from some function space $F$ such that $f(\boldsymbol{x}_i) = \boldsymbol{y}_i$.
-    \end{block}
-
-    \begin{example}
-        \[D = \{(0, 0), (1, 1), (-1, 0)\}\]
-        \[F = \{x^2 + ax + b \vert a, b \in \mathbb{R}\}\]
-        \[\emptyset\]
-    \end{example}
-
-    \begin{block}{Regression (informal)}
-        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f$ from some function space $F$ such that $f$ fits $D$ best.
-    \end{block}
-\end{frame}
+\section{Background}
 
 \begin{frame}
     \frametitle{Machine Learning: Regression}
@@ -111,52 +75,14 @@
         \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} \lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2\]
     \end{block}
 
-\end{frame}
-
-\begin{frame}
-    \frametitle{Machine Learning: Regression}
-
     \[D = \{(0, 0), (1, 1), (-1, 0)\},\; F = \{x^2 + ax + b \vert a, b \in \mathbb{R}\}, \;\boldsymbol{\theta} = \begin{bmatrix}
         a \\
         b
     \end{bmatrix}\]
-    \begin{align*}
-        L(\boldsymbol{\theta}) &= \frac{(0 - f_{\boldsymbol{\theta}}(0))^2 + (1 - f_{\boldsymbol{\theta}}(1))^2 + (0 - f_{\boldsymbol{\theta}}(-1))^2}{3} \\
-        &= \frac{2a^{2} + 3b^{2} - 2a + 2b + 1}{3}
-    \end{align*}
-    \[f = x^2 + \frac{1}{2}x - \frac{1}{3},\quad L(\boldsymbol{\theta}) = \frac{1}{18}\]
-    \centering
-    \includegraphics[height=.3\textheight]{res/function.png}
 
 \end{frame}
 
-\begin{frame}
-    
-\frametitle{Gradient Descent}
-    
-\begin{block}{Gradient Descent}
-    Goal: to find a $\hat{\boldsymbol{\theta}}$ such that $\hat{\boldsymbol{\theta}} = \argmin_{\boldsymbol{\theta}} L(\boldsymbol{\theta})$.
-
-    \[\boldsymbol{\theta}_{0} = random\,generated\]
-    \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta}_{k})\]
-
-    where $\alpha$ is chosen s.t. $\alpha > 0$.
-\end{block}
-
-\begin{example}
-    \begin{columns}
-        \begin{column}{.5\textwidth}
-            \[L(x, y) = \frac{2x^{2} + 3y^{2} - 2x + 2y + 1}{3}\]
-        \end{column}
-        \begin{column}{.4\textwidth}
-            \includegraphics[height=.3\textheight]{res/func3d.png}
-        \end{column}
-    \end{columns}
-\end{example}
-
-\end{frame}
-
-\begin{frame}{Distributed Learning}{Gradient Descent in Machine Learning}
+\begin{frame}{Gradient Descent in Machine Learning}
 
 \begin{block}{Gradient Descent}
     \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta}_{k})\]
@@ -165,50 +91,36 @@
 \begin{block}{Loss Function: Mean Squared Error (MSE)}
     \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} \lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2\]
     \[\boldsymbol{\nabla}L(\boldsymbol{\theta}) = \sum_{i = 1}^{N}\frac{\partial\frac{1}{N}\lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2}{\partial\boldsymbol{\theta}}\]
-    Gradient can be calculated distributedly
 \end{block}
 
 \end{frame}
 
 \begin{frame}{Distributed Learning}{Straggler Problem}
-
-\begin{figure}
-    \centering
-    \includegraphics[height=.5\textheight]{res/distributed_learning.pdf}
-\end{figure}
-
-Problem:
-\begin{itemize}
-    \item Some workers may be stragglers (work much slower)
-\end{itemize}
-
-Possible Solutions:
-\begin{itemize}
-    \item Asynchronous SGD
-    \item Synchronous minibatch SGD
-\end{itemize}
-
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \begin{block}{Problem Setting}
+                Given data sets $D_1, \dots, D_k$ ($D_i$ can be viewed as a vector). Each round, a parameter $\boldsymbol{\theta}$ is given. Calculate $\boldsymbol{g}_{\boldsymbol{\theta}}(D_1) + \dots + \boldsymbol{g}_{\boldsymbol{\theta}}(D_k)$.
+            \end{block}
+            Problem:
+            \begin{itemize}
+                \item Some workers may be stragglers (work much slower)
+            \end{itemize}
+            
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[height=.5\textheight]{res/distributed_learning.pdf}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
-
-\section{Gradient Coding}
-
-\subsection{An Example}
 
 \begin{frame}{Distributed Learning}{Solution: replication}
 
 \begin{figure}
     \centering
     \includegraphics[height=.7\textheight]{res/replicate.pdf}
-    % \begin{minipage}[t]{0.48\textwidth}
-    %     \centering
-    %     \includegraphics[width=\textwidth]{res/replicate.pdf}
-    %     \caption{Replication}
-    %     \end{minipage}
-    %     \begin{minipage}[t]{0.48\textwidth}
-    %     \centering
-    %     \includegraphics[width=\textwidth]{res/distributed_learning.pdf}
-    %     \caption{Naive synchronous gradient descent}
-    % \end{minipage}
 \end{figure}
 
 \end{frame}
@@ -218,19 +130,11 @@ Possible Solutions:
 \begin{figure}
     \centering
     \includegraphics[height=.7\textheight]{res/gradient coding.pdf}
-    % \begin{minipage}[t]{0.48\textwidth}
-    %     \centering
-    %     \includegraphics[width=\textwidth]{res/gradient coding.pdf}
-    %     \caption{Gradient coding}
-    %     \end{minipage}
-    %     \begin{minipage}[t]{0.48\textwidth}
-    %     \centering
-    %     \includegraphics[width=\textwidth]{res/replicate.pdf}
-    %     \caption{Replication}
-    % \end{minipage}
 \end{figure}
 
 \end{frame}
+
+\section{Gradient Coding}
 
 \subsection{General Case}
 
@@ -241,11 +145,11 @@ Possible Solutions:
 \end{definition}
 
 \begin{definition}
-    Let $A \in \mathbb{R}^{f \times n}$, the $i^{th}$ row of $A$ be $\boldsymbol{a_i}$. Each row of $A$ indicates a combination of surviving workers/non-stragglers.
+    Let $A \in \mathbb{R}^{f \times n}$, the $i^{th}$ row of $A$ be $\boldsymbol{a}_i$. Each row of $A$ indicates a combination of surviving workers/non-stragglers.
 \end{definition}
 
 \begin{definition}
-    Let $B \in \mathbb{R}^{n \times k}$, the $i^{th}$ row of $B$ be $\boldsymbol{b_i}$. $\boldsymbol{b_i}$ indicates the data partitions that the $i^{th}$ worker has access to.
+    Let $B \in \mathbb{R}^{n \times k}$, the $i^{th}$ row of $B$ be $\boldsymbol{b}_i$. $\boldsymbol{b}_i$ indicates the data partitions that the $i^{th}$ worker has access to.
 \end{definition}
 
 \end{frame}
