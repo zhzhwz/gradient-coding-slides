@@ -244,7 +244,7 @@
             \boldsymbol{0}_{(s+1)\times (s+1)} & \boldsymbol{1}_{(s+1)\times (s+1)} & \cdots & \boldsymbol{0}_{(s+1)\times (s+1)} \\
             \vdots & \vdots & \ddots & \vdots \\
             \boldsymbol{0}_{(s+1)\times (s+1)} & \boldsymbol{0}_{(s+1)\times (s+1)} & \cdots & \boldsymbol{1}_{(s+1)\times (s+1)}
-        \end{bmatrix}\]
+        \end{bmatrix}_{n\times n}\]
     \end{block}
 
     \begin{theorem}
@@ -253,16 +253,15 @@
 \end{frame}
 
 \begin{frame}{Cyclic Repetition Scheme}
-    \begin{block}{Form of $B$}
-        \[B = B_{cyc} = \begin{bmatrix}
-            \star & \star & \cdots & \star & \star & 0 & 0 & \cdots & 0 & 0 \\
-            0 & \star & \cdots & \star & \star & \star & 0 & \cdots & 0 & 0 \\
-            \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \ddots & \vdots & \vdots \\
-            0 & 0 & \cdots & 0 & 0 & \cdots & \star & \cdots & \star & \star \\
-            \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \ddots & \vdots & \vdots \\
-            \star & \cdots & \star & \star & 0 & 0 & \cdots & 0 & 0 & \star
-        \end{bmatrix}\]
-    \end{block}
+    \[B = B_{cyc} = \begin{bmatrix}
+        \star & \star & \cdots & \star & \star & 0 & 0 & \cdots & 0 & 0 \\
+        0 & \star & \cdots & \star & \star & \star & 0 & \cdots & 0 & 0 \\
+        \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \ddots & \vdots & \vdots \\
+        0 & 0 & \cdots & 0 & 0 & \cdots & \star & \cdots & \star & \star \\
+        \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \ddots & \vdots & \vdots \\
+        \star & \cdots & \star & \star & 0 & 0 & \cdots & 0 & 0 & \star
+    \end{bmatrix}_{n\times n}\]
+    ($s + 1$ non-zero elements in each row)
 
     \begin{block}{Construction}
         \begin{enumerate}
