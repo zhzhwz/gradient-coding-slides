@@ -175,11 +175,11 @@
 \end{definition}
 
 \begin{definition}
-    Let $A \in \mathbb{R}^{f \times n}$, the $i^{th}$ row of $A$ be $\boldsymbol{a}_i^T$. Each row of $A$ indicates a combination of surviving workers/non-stragglers.
+    Let $A \in \mathbb{R}^{f \times n}$, the $i^{th}$ row of $A$ be $\boldsymbol{a}_i$. Each row of $A$ indicates a combination of surviving workers/non-stragglers.
 \end{definition}
 
 \begin{definition}
-    Let $B \in \mathbb{R}^{n \times k}$, the $i^{th}$ row of $B$ be $\boldsymbol{b}_i^T$. $\boldsymbol{b}_i^T$ indicates the data partitions that the $i^{th}$ worker has access to.
+    Let $B \in \mathbb{R}^{n \times k}$, the $i^{th}$ row of $B$ be $\boldsymbol{b}_i$. $\boldsymbol{b}_i$ indicates the data partitions that the $i^{th}$ worker has access to.
 \end{definition}
 
 \end{frame}
@@ -188,7 +188,7 @@
 
 \begin{block}{Condition 1 (B-span)}
     Consider any scheme $(A, B)$ robust to any $s$ stragglers, given $n$ workers (with $s < n$). Then we require that for every subset $I \subseteq \{1, \dots, n\}, \lvert I \rvert = n - s$:
-    \[\boldsymbol{1}_{1\times k} \in span\{b_i \vert i \in I\}\]
+    \[\boldsymbol{1}_{1\times k} \in span\{\boldsymbol{b}_i \vert i \in I\}\]
     where $span\{·\}$ is the span of vectors.
 \end{block}
 
@@ -253,7 +253,23 @@
 \end{frame}
 
 \begin{frame}{Cyclic Repetition Scheme}
+    \begin{block}{Form of $B$}
+        \[B = B_{cyc} = \begin{bmatrix}
+            \star & \star & \cdots & \star & \star & 0 & 0 & \cdots & 0 & 0 \\
+            0 & \star & \cdots & \star & \star & \star & 0 & \cdots & 0 & 0 \\
+            \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \ddots & \vdots & \vdots \\
+            0 & 0 & \cdots & 0 & 0 & \cdots & \star & \cdots & \star & \star \\
+            \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \ddots & \vdots & \vdots \\
+            \star & \cdots & \star & \star & 0 & 0 & \cdots & 0 & 0 & \star
+        \end{bmatrix}\]
+    \end{block}
 
+    \begin{block}{Construction}
+        \begin{enumerate}
+            \item Construct a random matrix $H \in \mathbb{R}^{s\times n}$ satisfying $H\boldsymbol{1} = \boldsymbol{0}$
+            \item denote $S_i = \{i \mod n, \dots, (i + s) \mod n\}.$ for each $i$, let $b_i(i) = 1$, $b_i(S_i \backslash \{i\}) = -H_{S_i \backslash \{i\}}^{-1}H_i$
+        \end{enumerate}
+    \end{block}
 \end{frame}
 
 \section{Further Work}
@@ -280,9 +296,18 @@
         C. Hofmeister, L. Maßny, E. Yaakobi, and R. Bitar, “\textbf{Trading Communication for Computation in Byzantine-Resilient Gradient Coding},” arXiv preprint arXiv:2303.13231, 2023.
     \end{block}
 
-    \begin{block}{Main Idea}
-        Interactive protocal
-    \end{block}
+    \begin{example}
+        Setup: $g_1 = 1, g_2 = 2, g_3 = 3, g_4 = 4$, B is honest
+        \begin{table}
+            \begin{tabular}{llll}
+            query                   & A   & B    & info                             \\
+            $g_1 + g_2 + g_3 + g_4$ & $2$ & $10$ & $g_1 + g_2 + g_3 + g_4 = 2\ or\ 4$ \\
+            $g_1 + g_2$             & $3$ & $3$  & $g_3 + g_4 = -1\ or\ 7$            \\
+            $g_3$                   & $3$ & $3$  & $g_4 = -4\ or\ 4$                 
+            \end{tabular}
+        \end{table}
+        $Oracle(g_4) = 4$: B is honest
+    \end{example}
 \end{frame}
 
 \end{document}
