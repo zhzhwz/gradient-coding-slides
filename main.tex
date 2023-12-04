@@ -68,6 +68,22 @@
     \frametitle{Machine Learning: Regression}
 
     \begin{block}{Regression}
+        Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f$ from some function space $F$ such that
+        $f$ fits $D$ best ($f(\boldsymbol{x}_i)\approx \boldsymbol{y}_i$).
+    \end{block}
+
+    \begin{example}
+        \[D = \{(0, 0), (1, 1), (-1, 0)\}\] \\
+        \[F = \{x^2 + ax + b \vert a, b \in \mathbb{R}\}\] \\
+        \[f(x) = ?\]
+    \end{example}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Machine Learning: Regression}
+
+    \begin{block}{Regression}
         Given a data set $D = \{(\boldsymbol{x}_1, \boldsymbol{y}_1), \dots, (\boldsymbol{x}_N, \boldsymbol{y}_N)\}$. The goal is to find a function $f_{\hat{\boldsymbol{\theta}}}$ from some function space $F = \{f_{\boldsymbol{\theta}} \vert \boldsymbol{\theta} \in \mathbb{R}^m\}$ such that
         \[\hat{\boldsymbol{\theta}} = \argmin_{\boldsymbol{\theta}} L(\boldsymbol{\theta})\]
     \end{block}
@@ -85,14 +101,31 @@
 
 \begin{frame}{Gradient Descent in Machine Learning}
 
+\begin{example}
+    \begin{figure}
+        \includegraphics[height=.35\paperheight]{res/func3d.png}
+    \end{figure}
+    \[f(x, y) = \frac{1}{3}(1 - 2x + 3x^2 + 2y + 2y^2)\]
+\end{example}
+
 \begin{block}{Gradient Descent}
     \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta}_{k})\]
 \end{block}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Linearity of Loss Functions and Gradients}
+
+
+    \begin{block}{Gradient Descent}
+        \[\boldsymbol{\theta}_{k + 1} = \boldsymbol{\theta}_{k} - \alpha\boldsymbol{\nabla} L(\boldsymbol{\theta}_{k})\]
+    \end{block}
     
-\begin{block}{Loss Function: Mean Squared Error (MSE)}
-    \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} \lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2\]
-    \[\boldsymbol{\nabla}L(\boldsymbol{\theta}) = \sum_{i = 1}^{N}\frac{\partial\frac{1}{N}\lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2}{\partial\boldsymbol{\theta}}\]
-\end{block}
+    \begin{block}{Loss Function: Mean Squared Error (MSE)}
+        \[L(\boldsymbol{\theta}) = \frac{1}{N}\sum_{i = 1}^{N} \lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2\]
+        \[\boldsymbol{\nabla}L(\boldsymbol{\theta}) = \sum_{i = 1}^{N}\frac{1}{N}\frac{\partial\lVert\boldsymbol{y}_i - f_{\boldsymbol{\theta}}(\boldsymbol{x}_i)\rVert^2}{\partial\boldsymbol{\theta}}\]
+    \end{block}
 
 \end{frame}
 
@@ -104,7 +137,7 @@
             \end{block}
             Problem:
             \begin{itemize}
-                \item Some workers may be stragglers (work much slower)
+                \item Some workers may be stragglers (work 5x slower)
             \end{itemize}
             
         \end{column}
@@ -123,6 +156,8 @@
     \centering
     \includegraphics[height=.7\textheight]{res/replicate.pdf}
 \end{figure}
+
+Problem: high communication cost
 
 \end{frame}
 
@@ -271,7 +306,28 @@
     \end{block}
 \end{frame}
 
-\section{Further Work}
+\section{Extends}
+
+\begin{frame}
+    \frametitle{Partial Stragglers}
+
+    \begin{block}{Problem Setting}
+        Each of the $s$ stragglers can finish work in $\alpha T$ time, while normal worker takes $T$ time.
+
+        How to make use of stragglers?
+    \end{block}
+
+    \begin{solution}
+        
+        \begin{itemize}
+            \item split the data $D$ into \textbf{naive} components and \textbf{coded} components
+            \item all the workers process the \textbf{naive} components in normal way
+            \item all the workers process the \textbf{coded} components using previous scheme
+            \item size of \textbf{naive} components and \textbf{coded} components are $\frac{s + 1}{\alpha - 1} : 1$
+        \end{itemize}
+    \end{solution}
+
+\end{frame}
 
 \begin{frame}{DRACO}
     \begin{block}{Reference}
