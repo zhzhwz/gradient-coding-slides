@@ -306,6 +306,29 @@ Problem: high communication cost
     \end{block}
 \end{frame}
 
+\begin{frame}{Cyclic Repetition SchemeL Construction Detail}
+    \begin{block}{Construction Detail}
+        \begin{enumerate}
+            \item Construct a random matrix $H \in \mathbb{R}^{s\times n}$ satisfying $H\boldsymbol{1} = \boldsymbol{0}$
+            
+            Let $S$ be $H$'s null space. Then:
+            \begin{itemize}
+                \item Any $s$ columns of $H$ are linearly independent with probability $1$
+                \item $dim(S) = n - s$ with probability $1$
+                \item $\boldsymbol{1}\in S$, where $1$ is the all-ones vector
+            \end{itemize}
+            \item denote $S_i = \{i \mod n, \dots, (i + s) \mod n\}.$ for each $i$, let $b_i(i) = 1$, $b_i(S_i \backslash \{i\}) = -H_{S_i \backslash \{i\}}^{-1}H_i$
+
+            Then:
+            \begin{itemize}
+                \item $b_i\in S$
+                \item every element of $b_i(S_i \backslash \{i\})$ is non-zero with probability $1$
+                \item for any subset $I\subset\{1, \dots, n\}$, $\lvert I\rvert = n - s$, the set of vectors $\{b_i \vert i\in I\}$ is linearly independent with probability $1$
+            \end{itemize}
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
 \section{Extends}
 
 \begin{frame}
